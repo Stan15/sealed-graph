@@ -1,0 +1,27 @@
+{
+  "name": "online-graph",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Stan15/online-graph.git"
+  },
+  "keywords": [
+    "graph",
+    "online",
+    "datastructure",
+    "data",
+    "structure",
+    "algorithms"
+  ],
+  "author": "Stanley Ihesiulo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stan15/online-graph/issues"
+  },
+  "homepage": "https://github.com/Stan15/online-graph#readme"
+}
