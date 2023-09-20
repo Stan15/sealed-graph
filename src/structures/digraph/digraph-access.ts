@@ -1,31 +1,10 @@
-export default class SealedDigraph<T> {
+export default abstract class DigraphAccess<T> {
     protected constructor(
         protected parentsAdjacencyList: Map<T, Set<T>> = new Map(),
         protected childrenAdjacencyList: Map<T, Set<T>> = new Map(),
         protected _sources: Set<T> = new Set(),
         protected _sinks: Set<T> = new Set(),
     ) {}
-
-    public static empty<T>() {
-        return new SealedDigraph<T>(new Map(), new Map(), new Set(), new Set());
-    }
-
-    public static seal<T, G extends SealedDigraph<T>>(graph: G) {
-        const parents = new Map<T, Set<T>>();
-        for (const [ vertex, set ] of graph.parentsAdjacencyList) {
-            parents.set(vertex, new Set(set));
-        }
-        const children = new Map();
-        for (const [ vertex, set ] of graph.childrenAdjacencyList) {
-            children.set(vertex, new Set(set));
-        }
-        return new SealedDigraph(
-            parents,
-            children,
-            new Set(graph._sources),
-            new Set(graph._sinks)
-        );
-    }
 
     public getParents(vertex: T) {
         if (this.parentsAdjacencyList.has(vertex)) {

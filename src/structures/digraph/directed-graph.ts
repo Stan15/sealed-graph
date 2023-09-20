@@ -1,11 +1,7 @@
-import SealedDigraph from "./sealed-digraph";
+import DigraphAccess from "./digraph-access";
 
-export default class DirectedGraph<T> extends SealedDigraph<T> {
+export default class DirectedGraph<T> extends DigraphAccess<T> {
     constructor() { super() }
-
-    public get sealed() {
-        return SealedDigraph.seal(this);
-    }
 
     /**
     * Adds an edge from sourceVertex to targetVertex to the graph.

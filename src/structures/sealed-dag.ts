@@ -1,15 +1,21 @@
 import DirectedGraph from "./digraph/directed-graph";
-import SealedDigraph from "./digraph/sealed-digraph";
+import DigraphAccess from "./digraph/digraph-access";
 import { TopologicalOrderIterator, TopologicalLevelIterator } from "../iterators/top-iterator";
 
-export default class SealedDAG<T> extends SealedDigraph<T> {
-    private constructor() { super() }
-    public static from<T>(graph: DirectedGraph<T>, {trust_me_bro = false}) {
+export default class SealedDAG<T> extends DigraphAccess<T> {
+    public static from<T>(graph: DigraphAccess<T>, {trust_me_bro = false}) {
         if (!trust_me_bro && this.hasCycle(graph)) throw new Error("Cannot create a DAG from a cyclic graph.");
-        return graph.sealed;
+
+        const parents = new Map<T, Set<T>>();
+        const children = new Map<T, Set<T>>();
+        for (const vertex of graph.vertexSet()) {
+            parents.set(vertex, graph.getParents(vertex));
+            children.set(vertex, graph.getChildren(vertex));
+        }
+        return new SealedDAG(parents, children, new Set(graph.sources), new Set(graph.sinks));
     }
 
-    private static hasCycle<T>(graph: DirectedGraph<T>) {
+    private static hasCycle<T>(graph: DigraphAccess<T>) {
         const visiting = new Set<T>();
         const visited = new Set<T>();
 
