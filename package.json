@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "rollup -c",
+    "prepare": "npm run build",
     "test": "jest"
   },
   "files": ["dist"],
