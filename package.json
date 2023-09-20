@@ -8,6 +8,7 @@
     "build": "rollup -c",
     "test": "jest"
   },
+  "files": ["dist"],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/Stan15/online-graph.git"
