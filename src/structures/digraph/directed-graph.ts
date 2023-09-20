@@ -1,6 +1,7 @@
 import SealedDigraph from "./sealed-digraph";
 
-export default class Digraph<T> extends SealedDigraph<T> {
+export default class DirectedGraph<T> extends SealedDigraph<T> {
+    constructor() { super() }
 
     public get sealed() {
         return SealedDigraph.seal(this);
