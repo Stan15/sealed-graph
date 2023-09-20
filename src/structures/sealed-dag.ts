@@ -10,7 +10,27 @@ export default class SealedDAG<T> extends SealedDigraph<T> {
     }
 
     private static hasCycle<T>(graph: DirectedGraph<T>) {
-        // TODO
+        const visiting = new Set<T>();
+        const visited = new Set<T>();
+
+        const stack = [...graph.sources];
+        while (stack.length>0) {
+            const vertex = stack[stack.length-1]!;
+            if (!visiting.has(vertex)) {
+                visiting.add(vertex);
+                for (const child of graph.getChildren(vertex)) {
+                    if (visiting.has(child)) {
+                        return true; // cycle detected
+                    } else if (!visited.has(child)) {
+                        stack.push(child);
+                    }
+                }
+            } else {
+                visiting.delete(vertex);
+                visited.add(vertex);
+                stack.pop();
+            }
+        }
         return true;
     }
 
