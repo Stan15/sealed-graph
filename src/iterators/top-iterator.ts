@@ -34,6 +34,7 @@ export class TopologicalOrderIterator<T> {
                 }
             }
             current_level = next_level;
+            next_level = new Set<T>();
         }
     }
 }
@@ -72,6 +73,7 @@ export class TopologicalLevelIterator<T> {
             }
             yield current_level;
             current_level = next_level;
+            next_level = new Set<T>();
         }
     }
 }

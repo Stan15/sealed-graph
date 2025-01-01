@@ -55,4 +55,14 @@ export default abstract class DigraphAccess<T> {
             return this.childrenAdjacencyList.get(vertex)!.size;
         }
     }
+
+    public toString() {
+        let res = "";
+        this.childrenAdjacencyList.forEach((children, vertex) => {
+            children.forEach(child => {
+                res += `${String(vertex)} -> ${String(child)}\n`;
+            });
+        });
+        return res;
+    }
 }
