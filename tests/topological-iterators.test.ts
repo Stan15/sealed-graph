@@ -1,3 +1,5 @@
+// Credits: Thank you ChatGPT for helping me generate test cases 🙏
+
 import { describe, test, expect } from "@jest/globals";
 import SealedDAG from "../src/structures/sealed-dag";
 import DirectedGraph from "../src/structures/digraph/directed-graph";
@@ -476,6 +478,71 @@ describe("Topological Iterators Tests", () => {
       // G, I might be level 3 or so, etc.
       expect(levelOf("L")).toBeGreaterThan(levelOf("K"));
     });
+
+    test("top_order => thorough checks", () => {
+      const dag = buildSealedDAG(nodes, edges);
+      const order = [...dag.top_order];
+
+      // 1) All nodes must appear exactly once
+      expect(order.length).toBe(nodes.length);
+      const uniqueSet = new Set(order);
+      expect(uniqueSet.size).toBe(nodes.length);
+
+      // 2) For each edge, index(from) < index(to)
+      edges.forEach(([from, to]) => {
+        expect(order.indexOf(from)).toBeLessThan(order.indexOf(to));
+      });
+    });
+
+    test("top_levels => thorough checks", () => {
+      const dag = buildSealedDAG(nodes, edges);
+      const layers = [...dag.top_levels].map(l => [...l]);
+
+      // 3) Each node in exactly one layer
+      const flattened = layers.flat();
+      expect(flattened.length).toBe(nodes.length);
+      const uniqueSet = new Set(flattened);
+      expect(uniqueSet.size).toBe(nodes.length);
+
+      // 4) Edge constraint: levelOf(from) < levelOf(to)
+      const levelOf = (node: string) =>
+        layers.findIndex(level => level.includes(node));
+
+      edges.forEach(([from, to]) => {
+        expect(levelOf(from)).toBeLessThan(levelOf(to));
+      });
+    });
+    test("levels are as compressed as possible", () => {
+      const dag = buildSealedDAG(nodes, edges);
+      const levels = [...dag.top_levels].map(layer => [...layer]);
+
+      // Manually adjust levels to make the test fail
+      // Move some nodes from level 1 to a new level above it
+      // if (levels.length > 1) {
+      //   const nodesToMove = levels[1].splice(0, 2); // Move first two nodes from level 1
+      //   levels.splice(1, 0, nodesToMove); // Insert a new level above the current level 1
+      // }
+
+      // Utility to return the level index of a given node
+      const levelOf = (node: string) =>
+        levels.findIndex(layer => layer.includes(node));
+
+      // Build a quick map of each node's parents
+      // (i.e., all nodes that have an edge to this node)
+      const parents: Record<string, string[]> = {};
+      nodes.forEach(n => (parents[n] = []));
+      edges.forEach(([from, to]) => parents[to]!.push(from));
+
+      // For each node, verify that its level is exactly
+      // one more than the max level of its parents
+      // If it has no parents, it should be level 0
+      nodes.forEach(node => {
+        const nodeLevel = levelOf(node);
+        const parentLevels = parents[node]!.map(p => levelOf(p));
+        const expectedLevel = parentLevels.length > 0 ? Math.max(...parentLevels) + 1 : 0;
+        expect(nodeLevel).toBe(expectedLevel);
+      });
+    });
   });
 
   //
@@ -542,7 +609,70 @@ describe("Topological Iterators Tests", () => {
       expect(levelOf("T")).toBeGreaterThan(levelOf("S"));
       expect(levelOf("U")).toBeGreaterThan(levelOf("S"));
     });
+
+    test("top_order => thorough checks", () => {
+      const dag = buildSealedDAG(nodes, edges);
+      const order = [...dag.top_order];
+
+      // 1) All nodes must appear exactly once
+      expect(order.length).toBe(nodes.length);
+      const uniqueSet = new Set(order);
+      expect(uniqueSet.size).toBe(nodes.length);
+
+      // 2) For each edge, index(from) < index(to)
+      edges.forEach(([from, to]) => {
+        expect(order.indexOf(from)).toBeLessThan(order.indexOf(to));
+      });
+    });
+
+    test("top_levels => thorough checks", () => {
+      const dag = buildSealedDAG(nodes, edges);
+      const layers = [...dag.top_levels].map(l => [...l]);
+
+      // 3) Each node in exactly one layer
+      const flattened = layers.flat();
+      expect(flattened.length).toBe(nodes.length);
+      const uniqueSet = new Set(flattened);
+      expect(uniqueSet.size).toBe(nodes.length);
+
+      // 4) Edge constraint: levelOf(from) < levelOf(to)
+      const levelOf = (node: string) =>
+        layers.findIndex(level => level.includes(node));
+
+      edges.forEach(([from, to]) => {
+        expect(levelOf(from)).toBeLessThan(levelOf(to));
+      });
+    });
+    test("levels are as compressed as possible", () => {
+      const dag = buildSealedDAG(nodes, edges);
+      const levels = [...dag.top_levels].map(layer => [...layer]);
+
+      // Manually adjust levels to make the test fail
+      // Move some nodes from level 1 to a new level above it
+      // if (levels.length > 1) {
+      //   const nodesToMove = levels[1].splice(0, 2); // Move first two nodes from level 1
+      //   levels.splice(1, 0, nodesToMove); // Insert a new level above the current level 1
+      // }
+
+      // Utility to return the level index of a given node
+      const levelOf = (node: string) =>
+        levels.findIndex(layer => layer.includes(node));
+
+      // Build a quick map of each node's parents
+      // (i.e., all nodes that have an edge to this node)
+      const parents: Record<string, string[]> = {};
+      nodes.forEach(n => (parents[n] = []));
+      edges.forEach(([from, to]) => parents[to]!.push(from));
+
+      // For each node, verify that its level is exactly
+      // one more than the max level of its parents
+      // If it has no parents, it should be level 0
+      nodes.forEach(node => {
+        const nodeLevel = levelOf(node);
+        const parentLevels = parents[node]!.map(p => levelOf(p));
+        const expectedLevel = parentLevels.length > 0 ? Math.max(...parentLevels) + 1 : 0;
+        expect(nodeLevel).toBe(expectedLevel);
+      });
+    });
   });
 });
-
-

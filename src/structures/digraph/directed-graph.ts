@@ -15,8 +15,8 @@ export default class DirectedGraph<T> extends DigraphAccess<T> {
         this.parentsAdjacencyList.get(targetVertex)?.add(sourceVertex);
         this.childrenAdjacencyList.get(sourceVertex)?.add(targetVertex);
 
-        this.sources.delete(targetVertex);
-        this.sinks.delete(sourceVertex);
+        this._sources.delete(targetVertex);
+        this._sinks.delete(sourceVertex);
     }
 
     public removeEdge(sourceVertex: T, targetVertex: T) {
@@ -26,11 +26,11 @@ export default class DirectedGraph<T> extends DigraphAccess<T> {
         sourceDescendantList?.delete(targetVertex);
 
 
-        if (this.parentsAdjacencyList.get(sourceVertex)?.size==0) this.sources.add(sourceVertex);
-        if (this.parentsAdjacencyList.get(targetVertex)?.size==0) this.sources.add(targetVertex);
+        if (this.parentsAdjacencyList.get(sourceVertex)?.size==0) this._sources.add(sourceVertex);
+        if (this.parentsAdjacencyList.get(targetVertex)?.size==0) this._sources.add(targetVertex);
 
-        if (this.childrenAdjacencyList.get(sourceVertex)?.size==0) this.sinks.add(sourceVertex);
-        if (this.childrenAdjacencyList.get(targetVertex)?.size==0) this.sinks.add(targetVertex);
+        if (this.childrenAdjacencyList.get(sourceVertex)?.size==0) this._sinks.add(sourceVertex);
+        if (this.childrenAdjacencyList.get(targetVertex)?.size==0) this._sinks.add(targetVertex);
     }
 
     /**
@@ -43,8 +43,8 @@ export default class DirectedGraph<T> extends DigraphAccess<T> {
         this.parentsAdjacencyList.set(vertex, new Set());
         this.childrenAdjacencyList.set(vertex, new Set());
 
-        this.sources.add(vertex);
-        this.sinks.add(vertex);
+        this._sources.add(vertex);
+        this._sinks.add(vertex);
     }
 
     /**
@@ -55,7 +55,7 @@ export default class DirectedGraph<T> extends DigraphAccess<T> {
         this.parentsAdjacencyList.delete(vertex);
         this.childrenAdjacencyList.delete(vertex);
 
-        this.sources.delete(vertex);
-        this.sinks.delete(vertex);
+        this._sources.delete(vertex);
+        this._sinks.delete(vertex);
     }
 }

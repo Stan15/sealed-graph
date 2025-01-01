@@ -1,4 +1,3 @@
-import DirectedGraph from "./digraph/directed-graph";
 import DigraphAccess from "./digraph/digraph-access";
 import { TopologicalOrderIterator, TopologicalLevelIterator } from "../iterators/top-iterator";
 
@@ -37,7 +36,7 @@ export default class SealedDAG<T> extends DigraphAccess<T> {
                 stack.pop();
             }
         }
-        return true;
+        return false;
     }
 
     get top_order() { return new TopologicalOrderIterator(this) }
